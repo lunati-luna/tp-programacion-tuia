@@ -1,6 +1,8 @@
 import csv
 
-
+"""
+EJERCICIO 2 Y 3
+"""
 def fusionarArchivosCSV(lista_archivos_entrada: list[str], archivo_salida: str) -> None:
   """
   fusionarArchivosCSV recibe una lista con los nombres de los archivos a fusionar archivo (con el formato
