@@ -1,42 +1,35 @@
 import csv
 
 def obtenerAnios(archivo_entrada: str) -> list[int]:
-    """
-    Recibe el nombre de un archivo (con el formato publicado de la línea 144)
-    y devuelve la lista de años que aparecen en el archivo, ordenada de mayor a menor
-    y sin elementos repetidos.
-    """
-    anios_unicos = set()  # Conjunto para evitar que los años se repitan
+    anios_unicos = set()  # Usamos set para evitar repetidos
 
     try:
         with open(archivo_entrada, mode="r", encoding="utf-8") as f_entrada:
             lector = csv.reader(f_entrada)
-            
-            # Saltamos la fila de encabezados ('fecha', 'provincia', etc.)
-            next(lector, None)
+            next(lector, None)  # Saltamos el encabezado
             
             for fila in lector:
-                # Verificamos que la fila no esté vacía y tenga elementos
                 if fila and len(fila) > 0:
-                    fecha = fila[0].strip()  # La fecha está en la primera columna (índice 0)
+                    # 1. Agarramos el string de la fecha de la primera columna
+                    fecha = fila[0].strip()  
                     
                     if fecha:
-                        # Cortamos el string por el guion (ej: "2022-05-14" -> ["2022", "05", "14"])
+                        # 2. Separamos por el guion. Esto nos da una LISTA: ['YYYY', 'MM', 'DD']
                         partes = fecha.split("-")
+                        
+                        # 3. Extraemos SOLO el primer elemento de esa lista (el año)
                         anio_str = partes[0]
                         
-                        # Validamos que sea un año numérico correcto de 4 dígitos
+                        # 4. Validamos y lo guardamos convertido a NÚMERO ENTERO (int)
                         if anio_str.isdigit() and len(anio_str) == 4:
                             anios_unicos.add(int(anio_str))
                             
     except FileNotFoundError:
-        print(f"Error: El archivo '{archivo_entrada}' no fue encontrado.")
+        print(f"Error: El archivo '{archivo_entrada}' no existe.")
         return []
 
-    # Convertimos a lista y ordenamos de MAYOR a MENOR usando reverse=True
-    lista_ordenada = sorted(list(anios_unicos), reverse=True)
-    return lista_ordenada
-
+    # Como ahora anios_unicos tiene SOLO números enteros, el sorted() no va a fallar
+    return sorted(list(anios_unicos), reverse=True)
 # --- INVOCACIÓN PARA MOSTRAR LA LISTA EN LA TERMINAL ---
 
 lista_de_anios = obtenerAnios("datos_filtrados.csv")
